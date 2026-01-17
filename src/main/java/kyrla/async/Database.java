@@ -23,6 +23,14 @@ public class Database {
         }
     }
 
+
+    // Добавить в Database.java
+public void closeConnection() throws SQLException {
+    if (connection != null && !connection.isClosed()) {
+        connection.close();
+    }
+}
+
     // Метод для создания таблицы.
     public void initialize() throws SQLException {
         String sql = "CREATE TABLE IF NOT EXISTS player_stats (" +
