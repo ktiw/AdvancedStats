@@ -1,0 +1,10 @@
+name: Async
+version: 1.0
+main: kyrla.async.SimpleSQLiteStats
+api-version: 1.20
+
+commands:
+  hack:
+    description: проверка работы
+  stats:
+    description: Показать статистику
