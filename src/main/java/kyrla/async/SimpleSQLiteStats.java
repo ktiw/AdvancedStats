@@ -8,50 +8,46 @@ public final class SimpleSQLiteStats extends JavaPlugin {
 
     private Database database;
 
-
     @Override
     public void onEnable() {
-
         if (!getDataFolder().exists()) {
             getDataFolder().mkdirs();
         }
 
-
         database = new Database("stats.db");
 
         try {
-            database.сonnect(); // Открываем файл
-            database.initialize(); // Создаем таблицу
-            getLogger().info(" База данных успешно подключена!");
+            database.сonnect(); // Открываем дверь
+            database.initialize(); // Строим полки (таблицы)
+            getLogger().info("✅ База данных успешно подключена!");
+            
+
         } catch (SQLException e) {
             e.printStackTrace();
-            getLogger().severe("Ошибка подключения к БД! Выключаю плагин...");
+            getLogger().severe("❌ Ошибка подключения к БД! Плагин выключается, чтобы не сломать сервер.");
             getServer().getPluginManager().disablePlugin(this);
             return;
         }
-
-        try {
-            database.сonnect();
-            database.initialize();
-            getLogger().info(" База данных успешно подключена!");
-
-            database.createPlayerProfile("test-uuid-123");
-            System.out.println("👤 Тестовый игрок отправлен в базу!");
-
-            database.updateKills("test-uuid-123", 10);
-            System.out.println("Убийства обновлены!");
-        } catch (SQLException e) {
-        }
-
         saveDefaultConfig();
         getServer().getPluginManager().registerEvents(new StatsListener(this), this);
         getServer().getPluginManager().registerEvents(new PlayerDeathEvent(this), this);
         getCommand("stats").setExecutor(new StatsCommand(this));
-
-
     }
+
+    @Override
+    public void onDisable() {
+        
+        try {
+            if (database != null) {
+                database.closeConnection(); 
+                getLogger().info("🔒 Соединение с БД закрыто.");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
     public Database getDatabase() {
         return database;
     }
 }
-
